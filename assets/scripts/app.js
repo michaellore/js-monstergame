@@ -20,7 +20,6 @@ function endRound(){
         currentPlayerHealth = initialPlayerHealth;
         setPlayerHealth(initialPlayerHealth);
         alert('Bonus Life saved you!');
-        
     }
 
     if (currentMonsterHealth <= 0 && currentPlayerHealth > 0) {
