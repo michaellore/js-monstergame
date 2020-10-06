@@ -4,7 +4,6 @@ const MONSTER_ATTACK_VALUE = 16;
 const HEAL_VALUE = 15;
 const TYPE_ATTACK = 'ATTACK';
 const TYPE_STRONG_ATTACK = 'STRONG_ATTACK';
-const enteredValue = prompt('Enter life value for you and the monter', '100');
 
 const LOG_EVENT_PLAYER_ATTACK = 'PLAYER_ATTACK';
 const LOG_EVENT_PLAYER_STRONG_ATTACK = 'PLAYER_STRONG_ATTACK';
@@ -12,10 +11,25 @@ const LOG_EVENT_MONSTER_ATTACK = 'MONSTER_ATTACK';
 const LOG_EVENT_PLAYER_HEAL = 'PLAYER_HEAL';
 const LOG_EVENT_GAME_OVER = 'GAME_OVER';
 let battleLog = [];
+let lastLoggedEntry;
 
-let chosenMaxLife = parseInt(enteredValue);
-if (isNaN(chosenMaxLife) || chosenMaxLife <= 0){
+function getMaxLifeValues(){
+    const enteredValue = prompt('Enter life value for you and the monter', '100');
+    const parsedValue = parseInt(enteredValue);
+    if (isNaN(parsedValue) || parsedValue <= 0){
+        throw {message: 'Invalid input - not a number'};
+    }
+    return parsedValue;
+}
+
+let chosenMaxLife;
+try{
+    chosenMaxLife = getMaxLifeValues();
+} catch (error){
+    console.log(error);
     chosenMaxLife = 100;
+    alert('Invalid input, default value of 100 used');
+    throw error;
 }
 
 let currentMonsterHealth = chosenMaxLife;
@@ -176,7 +190,27 @@ function healPlayerHandler(){
 }
 
 function printLogHandler(){
-    console.log(battleLog);
+    //for loop
+    for(let i = 0; i < 3; i++){
+        console.log('------');
+    }
+    //for of loop (for arrays)
+    //print index # of array
+    let i = 0;
+    for (const logEntry of battleLog){
+        if(!lastLoggedEntry && lastLoggedEntry !== 0 || lastLoggedEntry < i){
+            console.log(`#${i}`);
+        //for in loop (for objects)
+        //print name of key => value of key
+        //each click prints last entry
+            for(const key in logEntry){
+                console.log(`${key} => ${logEntry[key]}`);
+            }
+            lastLoggedEntry = i;
+            break;
+        }
+        i++;
+    }
 }
 
 attackBtn.addEventListener('click', attackHandler);
